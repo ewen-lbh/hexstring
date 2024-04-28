@@ -20,7 +20,7 @@ Options:
 func main() {
 	args, _ := docopt.ParseDoc(Usage)
 
-	for _, arg := range args["<css color>"].([]string) {
+	for i, arg := range args["<css color>"].([]string) {
 		s, err := hexstring(arg)
 		if err != nil {
 			fmt.Printf("color %q is not a valid CSS color: %s\n", arg, err.Error())
@@ -31,7 +31,10 @@ func main() {
 			s = strings.TrimPrefix(s, "#")
 		}
 
-		fmt.Printf("%s ", s)
+		if i > 0 {
+			fmt.Print(" ")
+		}
+		fmt.Printf("%s", s)
 	}
 	if !flag(args, "-n") {
 		fmt.Println()
