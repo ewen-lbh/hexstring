@@ -1,6 +1,6 @@
 build:
 	go mod tidy
-	go build main.go -o hexstring
+	go build -o hexstring main.go
 
 install:
 	just build
