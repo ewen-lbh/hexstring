@@ -3,27 +3,44 @@ package main
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/MakeNowJust/heredoc"
+	"github.com/docopt/docopt-go"
 	"github.com/mazznoer/csscolorparser"
 )
 
-func main() {
-	if len(os.Args) == 1 {
-		fmt.Println(heredoc.Doc(`Usage: hexstring <css color>...`))
-		os.Exit(1)
-	}
+var Usage = heredoc.Doc(`Usage: hexstring [options] <css color>...
 
-	for _, arg := range os.Args[1:] {
+Options:
+  -H  don't add an '#' in front	
+  -n  don't add a newline at the end
+  `)
+
+func main() {
+	args, _ := docopt.ParseDoc(Usage)
+
+	for _, arg := range args["<css color>"].([]string) {
 		s, err := hexstring(arg)
 		if err != nil {
 			fmt.Printf("color %q is not a valid CSS color: %s\n", arg, err.Error())
 			os.Exit(1)
 		}
 
+		if flag(args, "-H") {
+			s = strings.TrimPrefix(s, "#")
+		}
+
 		fmt.Printf("%s ", s)
 	}
-	fmt.Println()
+	if !flag(args, "-n") {
+		fmt.Println()
+	}
+}
+
+func flag(opts docopt.Opts, key string) bool {
+	b, _ := opts.Bool(key)
+	return b
 }
 
 func hexstring(htmlcolor string) (string, error) {

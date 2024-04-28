@@ -10,7 +10,12 @@ go install github.com/ewen-lbh/hexstring@latest
 
 ## Examples
 
-```sh
-hexstring cyan red
+```shell
+$ hexstring cyan red
 #00ffff #ff0000
+```
+
+```shell
+$ hexstring -H yellow
+ffff00
 ```
